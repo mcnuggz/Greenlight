@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web.Mvc;
+using System.Web;
 
 namespace Greenlight.Models
 {
@@ -11,18 +11,21 @@ namespace Greenlight.Models
     {
         public Game()
         {
-            Genres = Enum.GetValues(typeof(Genre)).Cast<Genre>().ToList();
+            this.Users = new List<User>();
         }
-
-        public int GameID { get; set; }
+        public int ID { get; set; }
         [Required]
-        public string GameName { get; set; }
+        public string Name { get; set; }
         [Required]
-        [EnumDataType(typeof(Genre))]
-        public ICollection<Genre> Genres { get; set; }
-        [ForeignKey("DeveloperID")]
-        public Developer Developer { get; set; }
+        public string Genre { get; set; }
+        [Required, StringLength(1000), Display(Name ="Game Description"), DataType(DataType.MultilineText)]
+        public string Description { get; set; }
+        [Display(Name="Cover Art")]
+        public string ImagePath { get; set; }   
+        public double? Rating { get; set; }
+        [Required, Display(Name ="Price")]
+        public string Price { get; set; }
+        public virtual ICollection<User> Users { get; set; }
 
-        public virtual ICollection<File> Files { get; set; }
     }
 }
