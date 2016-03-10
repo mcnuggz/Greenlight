@@ -54,6 +54,7 @@ namespace Greenlight.Controllers
                 string path = Server.MapPath("~/Images/" + file.FileName);
                 file.SaveAs(path);
                 game.ImagePath = file.FileName;
+
                 db.Games.Add(game);
                 db.SaveChanges();
                 return RedirectToAction("Index");

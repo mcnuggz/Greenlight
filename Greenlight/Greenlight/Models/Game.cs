@@ -21,7 +21,11 @@ namespace Greenlight.Models
         [Required, StringLength(1000), Display(Name ="Game Description"), DataType(DataType.MultilineText)]
         public string Description { get; set; }
         [Display(Name="Cover Art")]
-        public string ImagePath { get; set; }   
+        public string ImagePath { get; set; }  
+        [Display(Name="Demo File")] 
+        public string Demo { get; set; }
+        [Display(Name ="Game File")]
+        public string FullGame { get; set; }
         public double? Rating { get; set; }
         [Required, Display(Name ="Price")]
         public string Price { get; set; }
