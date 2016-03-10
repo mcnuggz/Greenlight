@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Greenlight.Models;
+using System.IO;
 
 namespace Greenlight.Controllers
 {
@@ -43,17 +44,28 @@ namespace Greenlight.Controllers
         }
 
         // POST: Games/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Genre,Description,Rating,Price")] HttpPostedFileBase file, Game game)
+        public ActionResult Create([Bind(Include = "ID,Name,Genre,Description,Price")] Game game, HttpPostedFileBase file, HttpPostedFileBase demoFile, HttpPostedFileBase gameFile)
         {
             if (ModelState.IsValid)
             {
-                string path = Server.MapPath("~/Images/" + file.FileName);
+                string picture = Path.GetFileName(file.FileName);
+                string path = Path.Combine(Server.MapPath("~/Images/"), picture);              
                 file.SaveAs(path);
+
+                string demo = Path.GetFileName(demoFile.FileName);
+                string demoPath = Path.Combine(Server.MapPath("~/DemoFile/"), demo);
+                demoFile.SaveAs(demoPath);
+
+                string fullGame = Path.GetFileName(gameFile.FileName);
+                string gamePath = Path.Combine(Server.MapPath("~/GameFile"), fullGame);
+                gameFile.SaveAs(gamePath);
+
                 game.ImagePath = file.FileName;
+                game.Demo = demoFile.FileName;
+                game.FullGame = gameFile.FileName;
+
 
                 db.Games.Add(game);
                 db.SaveChanges();
@@ -83,10 +95,14 @@ namespace Greenlight.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Genre,Description,ImagePath,Rating,Price")] Game game)
+        public ActionResult Edit([Bind(Include = "ID,Name,Genre,Description,Price")] Game game, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
+                string picture = Path.GetFileName(file.FileName);
+                string path = Path.Combine(Server.MapPath("~/Images/"), picture);
+                file.SaveAs(path);
+                game.ImagePath = file.FileName;
                 db.Entry(game).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

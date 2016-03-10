@@ -5,7 +5,7 @@
 }
 
 <h2>Create</h2>
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Games", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -40,7 +40,21 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ImagePath, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" name="file" id="file" />
+                <input type="file" name="file" />
+            </div>   
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Demo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="demoFile" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FullGame, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="gameFile" />
             </div>
         </div>
 
@@ -57,6 +71,7 @@
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
+       
     </div>
 }
 
