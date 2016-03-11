@@ -8,20 +8,44 @@ using System.Web;
 using System.Web.Mvc;
 using Greenlight.Models;
 using System.IO;
+using System.Web.Hosting;
+using System.Net.Mime;
 
 namespace Greenlight.Controllers
 {
-    [Authorize(Roles ="Developer")]
+    
     public class GamesController : Controller
     {
         private GreenlightContext db = new GreenlightContext();
 
+        [AllowAnonymous]
+        public ActionResult CustomerIndex()
+        {
+            return View(db.Games.ToList());
+        }
+
+        [Authorize(Roles = "Developer")]
         // GET: Games
         public ActionResult Index()
         {
             return View(db.Games.ToList());
         }
-
+        [AllowAnonymous]
+        // GET: Games/Details/5
+        public ActionResult CustomerDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Game game = db.Games.Find(id);
+            if (game == null)
+            {
+                return HttpNotFound();
+            }
+            return View(game);
+        }
+        [Authorize(Roles = "Developer")]
         // GET: Games/Details/5
         public ActionResult Details(int? id)
         {
@@ -36,13 +60,13 @@ namespace Greenlight.Controllers
             }
             return View(game);
         }
-
+        [Authorize(Roles = "Developer")]
         // GET: Games/Create
         public ActionResult Create()
         {
             return View();
         }
-
+        [Authorize(Roles = "Developer")]
         // POST: Games/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,7 +75,7 @@ namespace Greenlight.Controllers
             if (ModelState.IsValid)
             {
                 string picture = Path.GetFileName(file.FileName);
-                string path = Path.Combine(Server.MapPath("~/Images/"), picture);              
+                string path = Path.Combine(Server.MapPath("~/Images/"), picture);
                 file.SaveAs(path);
 
                 string demo = Path.GetFileName(demoFile.FileName);
@@ -66,7 +90,7 @@ namespace Greenlight.Controllers
                 game.Demo = demoFile.FileName;
                 game.FullGame = gameFile.FileName;
 
-
+                ViewBag.Message = "Success";
                 db.Games.Add(game);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -74,7 +98,7 @@ namespace Greenlight.Controllers
 
             return View(game);
         }
-
+        [Authorize(Roles = "Developer")]
         // GET: Games/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -89,7 +113,7 @@ namespace Greenlight.Controllers
             }
             return View(game);
         }
-
+        [Authorize(Roles = "Developer")]
         // POST: Games/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -109,7 +133,7 @@ namespace Greenlight.Controllers
             }
             return View(game);
         }
-
+        [Authorize(Roles = "Developer")]
         // GET: Games/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -124,7 +148,7 @@ namespace Greenlight.Controllers
             }
             return View(game);
         }
-
+        [Authorize(Roles = "Developer")]
         // POST: Games/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -135,7 +159,7 @@ namespace Greenlight.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = "Developer")]
         protected override void Dispose(bool disposing)
         {
             if (disposing)

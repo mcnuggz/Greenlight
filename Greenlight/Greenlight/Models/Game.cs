@@ -28,7 +28,7 @@ namespace Greenlight.Models
         public string FullGame { get; set; }
         public double? Rating { get; set; }
         [Required, Display(Name ="Price")]
-        public string Price { get; set; }
+        public decimal Price { get; set; }
         public virtual ICollection<User> Users { get; set; }
 
     }
