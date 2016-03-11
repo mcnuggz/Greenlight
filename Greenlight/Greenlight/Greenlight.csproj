@@ -177,33 +177,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201603091950239_initial.cs" />
-    <Compile Include="Migrations\201603091950239_initial.Designer.cs">
-      <DependentUpon>201603091950239_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603092116336_updatefields.cs" />
-    <Compile Include="Migrations\201603092116336_updatefields.Designer.cs">
-      <DependentUpon>201603092116336_updatefields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603092159183_updateGame.cs" />
-    <Compile Include="Migrations\201603092159183_updateGame.Designer.cs">
-      <DependentUpon>201603092159183_updateGame.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603101758189_recloned.cs" />
-    <Compile Include="Migrations\201603101758189_recloned.Designer.cs">
-      <DependentUpon>201603101758189_recloned.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603101831225_updatedGame.cs" />
-    <Compile Include="Migrations\201603101831225_updatedGame.Designer.cs">
-      <DependentUpon>201603101831225_updatedGame.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603111738379_addingCartandOrders.cs" />
-    <Compile Include="Migrations\201603111738379_addingCartandOrders.Designer.cs">
-      <DependentUpon>201603111738379_addingCartandOrders.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603112241461_addingcart.cs" />
-    <Compile Include="Migrations\201603112241461_addingcart.Designer.cs">
-      <DependentUpon>201603112241461_addingcart.cs</DependentUpon>
+    <Compile Include="Migrations\201603112247406_reinitialize.cs" />
+    <Compile Include="Migrations\201603112247406_reinitialize.Designer.cs">
+      <DependentUpon>201603112247406_reinitialize.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -310,26 +286,8 @@
     <Content Include="Scripts\jquery-2.2.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201603091950239_initial.resx">
-      <DependentUpon>201603091950239_initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603092116336_updatefields.resx">
-      <DependentUpon>201603092116336_updatefields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603092159183_updateGame.resx">
-      <DependentUpon>201603092159183_updateGame.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603101758189_recloned.resx">
-      <DependentUpon>201603101758189_recloned.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603101831225_updatedGame.resx">
-      <DependentUpon>201603101831225_updatedGame.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603111738379_addingCartandOrders.resx">
-      <DependentUpon>201603111738379_addingCartandOrders.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603112241461_addingcart.resx">
-      <DependentUpon>201603112241461_addingcart.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201603112247406_reinitialize.resx">
+      <DependentUpon>201603112247406_reinitialize.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -7,13 +7,13 @@ namespace Greenlight.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class updateGame : IMigrationMetadata
+    public sealed partial class reinitialize : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(updateGame));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(reinitialize));
         
         string IMigrationMetadata.Id
         {
-            get { return "201603092159183_updateGame"; }
+            get { return "201603112247406_reinitialize"; }
         }
         
         string IMigrationMetadata.Source
