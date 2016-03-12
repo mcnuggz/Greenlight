@@ -10,7 +10,7 @@ namespace Greenlight.Models
     {
         GreenlightContext db = new GreenlightContext();
         string ShoppingCartID { get; set; }
-        const string CartSessionKey = "CartID";
+        public const string CartSessionKey = "CartID";
         public static ShoppingCart GetCart(HttpContextBase context)
         {
             var cart = new ShoppingCart();

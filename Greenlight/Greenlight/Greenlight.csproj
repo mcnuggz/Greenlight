@@ -169,6 +169,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CheckoutController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -180,6 +181,14 @@
     <Compile Include="Migrations\201603112247406_reinitialize.cs" />
     <Compile Include="Migrations\201603112247406_reinitialize.Designer.cs">
       <DependentUpon>201603112247406_reinitialize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603120521543_addedUserNameToOrders.cs" />
+    <Compile Include="Migrations\201603120521543_addedUserNameToOrders.Designer.cs">
+      <DependentUpon>201603120521543_addedUserNameToOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603120557157_changedOrderModel.cs" />
+    <Compile Include="Migrations\201603120557157_changedOrderModel.Designer.cs">
+      <DependentUpon>201603120557157_changedOrderModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -268,6 +277,7 @@
     <Content Include="Views\Games\CustomerIndex.cshtml" />
     <Content Include="Views\Games\CustomerDetails.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
+    <Content Include="Views\Checkout\AddressAndPayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -288,6 +298,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201603112247406_reinitialize.resx">
       <DependentUpon>201603112247406_reinitialize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603120521543_addedUserNameToOrders.resx">
+      <DependentUpon>201603120521543_addedUserNameToOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603120557157_changedOrderModel.resx">
+      <DependentUpon>201603120557157_changedOrderModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
