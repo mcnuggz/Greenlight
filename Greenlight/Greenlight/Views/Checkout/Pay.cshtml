@@ -1,0 +1,90 @@
+﻿@model Greenlight.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewBag.Title = "Order Summary";
+}
+
+<h3>
+    <em>Review Your Cart</em>
+</h3>
+
+@{
+    if (Model.CartItems.Count > 0)
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Summary</h3>
+            </div>
+            <div class="panel-body">
+                <div id="update-message"></div>
+
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>
+                                Item Name
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr id="row-@item.GameID">
+                            <td>
+                                @Html.ActionLink(item.Game.Name, "Details", "Store", new { id = item.ID }, null)
+                            </td>
+                            <td>
+                                @item.Game.Price
+                            </td>
+                            <td></td>
+                            <td>
+                                <a href="#" class="RemoveLink" data-id="@item.GameID">Remove</a>
+                            </td>
+                        </tr>
+                    }
+                    <tr class="info">
+                        <td>
+                            Total
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td id="cart-total">
+                            @Model.CartTotal
+                        </td>
+                    </tr>
+                </table>
+                <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    @for (int i = 0; i < Model.CartItems.Count; i++)
+                {
+                        <input type="hidden" name="add" value="1" />
+                        <input type="hidden" name="item_name_@i" value=@Model.CartItems[i].Game.Name>
+                        <input type="hidden" name="amount_@i" value=@Model.CartItems[i].Game.Price>
+                    }
+                    <input type="hidden" name="cmd" value=_cart>
+                    <input type="hidden" name="upload" value="1">
+                    <input type="hidden" name="lc" value="US">
+                    <input type="hidden" name="amount_x" value="@Html.DisplayFor(modelItem => modelItem.CartTotal)" >
+                    <input type="hidden" name="tax_rate" value="5.600">
+                    <input type="hidden" name="business" value="dzanfox-facilitator@gmail.com">
+                    <input type="hidden" name="return" value="http://localhost:43300/Checkout/Complete">
+                    <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted">
+                    <input type="hidden" class="btn btn-default" />
+                    <input type="hidden" name="currency_code" value="USD">
+                    <input type="hidden" name="shipping" value="0.00">
+                    <input type="hidden" name="cbt" value="Return to Greenlight" src="http://localhost:4889/Checkout/Complete">
+                    <input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <p> You're buying a whole lot of nothing. Go back and add something to the cart.</p>
+        </div>
+    }
+}

@@ -48,14 +48,14 @@ namespace Greenlight.Controllers
             Amount amount = new Amount
             {
                 currency = "USD",
-                total = string.Format(format, total),
+                total = string.Format(format, subtotal),
                 details = details
             };
             List<Transaction> transactionList = new List<Transaction>();
             transactionList.Add(new Transaction()
             {
                 description = "Transaction Description",
-                invoice_number = Utilities.Common.GetRandomInvoiceNumber(),
+                invoice_number = Common.GetRandomInvoiceNumber(),
                 amount = amount,
                 item_list = itemList
 
