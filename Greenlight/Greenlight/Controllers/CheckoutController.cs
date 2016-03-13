@@ -11,7 +11,7 @@ namespace Greenlight.Controllers
     public class CheckoutController : Controller
     {
         GreenlightContext db = new GreenlightContext();
-        const string PromoCode = "Free";
+        const string PromoCode = "FreeTax";
         public ActionResult AddressAndPayment()
         {
             return View();

@@ -54,9 +54,26 @@
             @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            <ul style="list-style: none">
+                <li>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                </li>
+                <li>
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                </li>
+                <li>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID }) |
+                </li>
+                <li>
+                    <p><a href="@item.Demo" download>Download Demo</a> |</p>
+                </li>
+                <li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Add to Cart", "AddToCart", "ShoppingCart", new { id = item.ID }, "")
+                    }
+                </li>
+            </ul>
         </td>
     </tr>
 }

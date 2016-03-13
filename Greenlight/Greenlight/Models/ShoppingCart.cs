@@ -65,7 +65,7 @@ namespace Greenlight.Models
         {
             var cartItem = db.Carts.Single(cart => cart.CartID == ShoppingCartID && cart.GameID == id);
             int itemCount = 0;
-            if (cartItem == null)
+            if (cartItem != null)
             {
                 if (cartItem.Count > 1)
                 {
