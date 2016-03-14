@@ -1,7 +1,10 @@
 ﻿using Greenlight.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,6 +17,7 @@ namespace Greenlight.Controllers
         const string PromoCode = "FreeTax";
         public ActionResult AddressAndPayment()
         {
+            Order previousOrder = db.Orders.FirstOrDefault(x => x.Username == User.Identity.Name);
             return View();
         }
 
@@ -22,24 +26,29 @@ namespace Greenlight.Controllers
         [HttpPost]
         public ActionResult AddressAndPayment(FormCollection values)
         {
-            var order = new Order();
+            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext()
+                .GetUserManager<ApplicationUserManager>()
+                .FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            Order order = new Order();
             TryUpdateModel(order);
             try
             {
-                if (string.Equals(values["PromoCode"], PromoCode, StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    return View(order);
-                }
                 order.Username = User.Identity.Name;
+                order.Email = user.Email;
                 order.OrderDate = DateTime.Now;
+                string currentUserId = User.Identity.GetUserId();
+
                 db.Orders.Add(order);
                 db.SaveChanges();
-                var cart = ShoppingCart.GetCart(this.HttpContext);
+                ShoppingCart cart = ShoppingCart.GetCart(this.HttpContext);
                 cart.CreateOrder(order);
-                return RedirectToAction("Complete", new { id = order.Id });
+
+                TempData["Order"] = order;
+                return RedirectToAction("PaymentWithPaypal", "Paypal");
             }
-            catch 
+            catch (Exception)
             {
+
                 return View(order);
             }
         }

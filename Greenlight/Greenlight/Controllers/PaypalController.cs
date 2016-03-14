@@ -10,6 +10,7 @@ using Order = Greenlight.Models.Order;
 
 namespace Greenlight.Controllers
 {
+    [Authorize]
     public class PaypalController : Controller
     {
         private Payment payment;
@@ -19,7 +20,7 @@ namespace Greenlight.Controllers
         }
         private Payment ExecutePayment(APIContext apiContext, string payerId, string paymentId)
         {
-            var paymentExecution = new PaymentExecution() { payer_id = payerId };
+            PaymentExecution paymentExecution = new PaymentExecution() { payer_id = payerId };
             this.payment = new Payment() { id = paymentId };
             return this.payment.Execute(apiContext, paymentExecution);
         }
@@ -37,7 +38,6 @@ namespace Greenlight.Controllers
                 description = cartItem.Game.Name,
                 price = string.Format(format, cartItem.Game.Price),
                 //tax = string.Format(format, tax),
-                quantity = cartItem.Quantity.ToString()
             }).ToList();
 
             ItemList itemList = new ItemList
@@ -100,17 +100,17 @@ namespace Greenlight.Controllers
 
                     var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid);
 
-                    var links = createdPayment.links.GetEnumerator();
+                    List<Links>.Enumerator links = createdPayment.links.GetEnumerator();
 
                     string paypalRedirectUrl = null;
 
                     while (links.MoveNext())
                     {
-                        Links lnk = links.Current;
+                        Links link = links.Current;
 
-                        if (lnk.rel.ToLower().Trim().Equals("approval_url"))
+                        if (link.rel.ToLower().Trim().Equals("approval_url"))
                         {
-                            paypalRedirectUrl = lnk.href;
+                            paypalRedirectUrl = link.href;
                         }
                     }
                     Session.Add(guid, createdPayment.id);
@@ -119,9 +119,9 @@ namespace Greenlight.Controllers
                 }
                 else
                 {
-                    var guid = Request.Params["guid"];
+                    string guid = Request.Params["guid"];
 
-                    var executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
+                    Payment executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
 
                     if (executedPayment.state.ToLower() != "approved")
                     {
