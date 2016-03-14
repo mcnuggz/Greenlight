@@ -1,5 +1,6 @@
 ﻿using Greenlight.Models;
 using Greenlight.Utilities;
+using log4net.Repository.Hierarchy;
 using PayPal.Api;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,23 @@ namespace Greenlight.Controllers
     public class PaypalController : Controller
     {
         private Payment payment;
-        private Payment ExecutePayment(APIContext apiContext, string payerID, string paymentID)
+        public ActionResult Index()
         {
-            var paymentExecution = new PaymentExecution() { payer_id = payerID };
-            this.payment = new Payment() { id = paymentID };
+            return View();
+        }
+        private Payment ExecutePayment(APIContext apiContext, string payerId, string paymentId)
+        {
+            var paymentExecution = new PaymentExecution() { payer_id = payerId };
+            this.payment = new Payment() { id = paymentId };
             return this.payment.Execute(apiContext, paymentExecution);
         }
+
         private Payment CreatePayment(APIContext apiContext, string redirectUrl)
         {
             Order order = (Order)TempData["Order"];
             List<OrderDetail> orderDetails = order.OrderDetails;
             string format = "{0:F2}";
-            decimal tax = 0m;
+            //decimal tax = 0m;
             List<Item> items = orderDetails.Select(cartItem => new Item
             {
                 name = cartItem.Game.Name,
@@ -33,6 +39,7 @@ namespace Greenlight.Controllers
                 //tax = string.Format(format, tax),
                 quantity = cartItem.Quantity.ToString()
             }).ToList();
+
             ItemList itemList = new ItemList
             {
                 items = items
@@ -42,7 +49,7 @@ namespace Greenlight.Controllers
             //decimal total = subtotal + tax;
             Details details = new Details
             {
-                tax = string.Format(format, tax),
+                //tax = string.Format(format, tax),
                 subtotal = string.Format(format, subtotal)
             };
             Amount amount = new Amount
@@ -66,7 +73,7 @@ namespace Greenlight.Controllers
                 return_url = redirectUrl
             };
 
-            payment = new Payment()
+            this.payment = new Payment()
             {
                 intent = "sale",
                 payer = payer,
@@ -83,40 +90,51 @@ namespace Greenlight.Controllers
             try
             {
                 string payerId = Request.Params["PayerID"];
+
                 if (string.IsNullOrEmpty(payerId))
                 {
                     string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority +
                                 "/Paypal/PaymentWithPayPal?";
+
                     var guid = Convert.ToString((new Random()).Next(100000));
+
                     var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid);
+
                     var links = createdPayment.links.GetEnumerator();
+
                     string paypalRedirectUrl = null;
+
                     while (links.MoveNext())
                     {
-                        Links link = links.Current;
-                        if (link.rel.ToLower().Trim().Equals("approval_url"))
+                        Links lnk = links.Current;
+
+                        if (lnk.rel.ToLower().Trim().Equals("approval_url"))
                         {
-                            paypalRedirectUrl = link.href;
+                            paypalRedirectUrl = lnk.href;
                         }
                     }
                     Session.Add(guid, createdPayment.id);
+
                     return Redirect(paypalRedirectUrl);
                 }
                 else
                 {
                     var guid = Request.Params["guid"];
+
                     var executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
+
                     if (executedPayment.state.ToLower() != "approved")
                     {
-                        return View("Failure");
+                        return View("FailureView");
                     }
                 }
             }
-            catch
+            catch (Exception)
             {
-                return View("Failure");
-            }
-            return View("Success");
-        }
+                return View("FailureView");
+    }
+
+            return View("SuccessView");
+}
     }
 }

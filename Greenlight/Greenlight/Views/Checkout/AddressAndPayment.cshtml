@@ -14,18 +14,25 @@
     <fieldset>
         <legend>Billing Information</legend>
         @Html.EditorForModel()
+        <div class="form-group">
+            <div class="col-md-10">
+                <br />
+                <input type='image' name='submit' src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif' border='0' align='top' alt='Check out with PayPal' />
+            </div>
+        </div>
     </fieldset>
     <fieldset>
         <legend>Payment</legend>
-        <p>We're running a special promotion: all tax is waived with the promo code: "FREE"</p>
+        <p>We're running a special promotion: all tax is waived with the promo code: "FreeTax"</p>
         <div class="editor-label">
             @Html.Label("Promo Code");
         </div>
         <div class="editor-field">
             @Html.TextBox("PromoCode")
         </div>
+
     </fieldset>
-    <input type="submit" value="Submit Order" class="btn btn-success btn-sm"/>
+    
 }
 
 

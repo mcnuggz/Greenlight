@@ -1,14 +1,12 @@
 ﻿using PayPal.Api;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Greenlight.Utilities
 {
     public static class Configuration
     {
         private static readonly string AccessToken;
+        private static readonly Dictionary<string, string> Config;
 
         static Configuration()
         {

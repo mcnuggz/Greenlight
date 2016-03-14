@@ -27,42 +27,47 @@
 <h3><em>Review Your Cart:</em></h3>
 
 <div id="update-message"></div>
-<table class="table table-condensed">
-    <tr>
-        <th>
-            Game Title
-        </th>
-        <th>
-            Price
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var item in Model.CartItems)
+@{
+    if (Model.CartItems.Count > 0)
     {
-        <tr id="row-@item.GameID">
-            <td>
-                @Html.ActionLink(item.Game.Name, "Details", "Store", new { id= item.GameID }, null)
-            </td>
-            <td>
-                @item.Game.Price
-            </td>
-            <td id="item-count-@item.GameID">
-                @item.Count
-            </td>
-            <td>
-                <a href="#" class="RemoveLink" data-id="@item.GameID">Remove</a>
-            </td>
-        </tr>
+        <table class="table table-condensed">
+            <tr>
+                <th>
+                    Game Title
+                </th>
+                <th>
+                    Price
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr id="row-@item.GameID">
+                    <td>
+                        @Html.ActionLink(item.Game.Name, "Details", "Store", new { id = item.GameID }, null)
+                    </td>
+                    <td>
+                        @item.Game.Price
+                    </td>
+                    <td id="item-count-@item.GameID">
+                        @item.Count
+                    </td>
+                    <td>
+                        <a href="#" class="RemoveLink" data-id="@item.GameID">Remove</a>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    Total
+                </td>
+                <td></td>
+                <td></td>
+                <td id="cart-total">
+                    @Model.CartTotal
+                </td>
+            </tr>
+        </table>
+        <button type="button" class="btn btn-success btn-sm" onclick="location.href='@Url.Action("AddressAndPayment", "Checkout")'">Checkout >></button>
     }
-    <tr>
-        <td>
-            Total
-        </td>
-        <td></td>
-        <td></td>
-        <td id="cart-total">
-            @Model.CartTotal
-        </td>
-    </tr>
-</table>
-<button type="button" class="btn btn-success btn-sm" onclick="location.href='@Url.Action("AddressAndPayment", "Checkout")'">Checkout >></button>
+}

@@ -22,3 +22,10 @@ select,
 textarea {
     max-width: 280px;
 }
+.jumbotron{
+    padding: 0;
+}
+.jumbotron img{
+    padding:0;
+    width: 100%;
+}
