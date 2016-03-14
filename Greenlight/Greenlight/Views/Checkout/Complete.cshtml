@@ -1,8 +1,9 @@
-﻿@model int?
+﻿@model Greenlight.Models.Game
 @{
     ViewBag.Title = "Checkout Complete";
 }
 
-<h2>Checkout Complete</h2>
-<p>Thanks for your purchase! Your order number is @Model</p>
-<p>@Html.ActionLink("Back to Store", "Index", "Home")</p>
+<h2>Payment Successful</h2>
+<p>Thank you for your purchase!</p>
+<p><a href="@Model.FullGame" download>Download your game</a></p>
+<p>How about getting another game in our @Html.ActionLink("store!", "Index", "Home")</p>

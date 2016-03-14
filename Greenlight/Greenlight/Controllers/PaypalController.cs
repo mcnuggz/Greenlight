@@ -30,34 +30,36 @@ namespace Greenlight.Controllers
             Order order = (Order)TempData["Order"];
             List<OrderDetail> orderDetails = order.OrderDetails;
             string format = "{0:F2}";
-            //decimal tax = 0m;
+
             List<Item> items = orderDetails.Select(cartItem => new Item
             {
                 name = cartItem.Game.Name,
                 currency = "USD",
-                description = cartItem.Game.Name,
-                price = string.Format(format, cartItem.Game.Price),
-                //tax = string.Format(format, tax),
+                price = string.Format(format, cartItem.Game.Price)
+
             }).ToList();
 
             ItemList itemList = new ItemList
             {
                 items = items
             };
+
             Payer payer = new Payer() { payment_method = "paypal" };
+
             decimal subtotal = order.Total;
-            //decimal total = subtotal + tax;
+
             Details details = new Details
             {
-                //tax = string.Format(format, tax),
                 subtotal = string.Format(format, subtotal)
             };
+
             Amount amount = new Amount
             {
                 currency = "USD",
                 total = string.Format(format, subtotal),
                 details = details
             };
+
             List<Transaction> transactionList = new List<Transaction>();
             transactionList.Add(new Transaction()
             {
@@ -67,6 +69,7 @@ namespace Greenlight.Controllers
                 item_list = itemList
 
             });
+
             var redirectUrls = new RedirectUrls()
             {
                 cancel_url = redirectUrl,
@@ -80,61 +83,53 @@ namespace Greenlight.Controllers
                 transactions = transactionList,
                 redirect_urls = redirectUrls
             };
-
             return payment.Create(apiContext);
         }
 
         public ActionResult PaymentWithPaypal()
         {
             APIContext apiContext = Configuration.GetAPIContext();
-            try
+            string payerId = Request.Params["PayerID"];
+
+            if (string.IsNullOrEmpty(payerId))
             {
-                string payerId = Request.Params["PayerID"];
+                string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority +
+                            "/Paypal/PaymentWithPayPal?";
 
-                if (string.IsNullOrEmpty(payerId))
+                var guid = Convert.ToString((new Random()).Next(100000));
+
+                var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid);
+
+                List<Links>.Enumerator links = createdPayment.links.GetEnumerator();
+
+                string paypalRedirectUrl = null;
+
+                while (links.MoveNext())
                 {
-                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority +
-                                "/Paypal/PaymentWithPayPal?";
+                    Links link = links.Current;
 
-                    var guid = Convert.ToString((new Random()).Next(100000));
-
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid);
-
-                    List<Links>.Enumerator links = createdPayment.links.GetEnumerator();
-
-                    string paypalRedirectUrl = null;
-
-                    while (links.MoveNext())
+                    if (link.rel.ToLower().Trim().Equals("approval_url"))
                     {
-                        Links link = links.Current;
-
-                        if (link.rel.ToLower().Trim().Equals("approval_url"))
-                        {
-                            paypalRedirectUrl = link.href;
-                        }
+                        paypalRedirectUrl = link.href;
                     }
-                    Session.Add(guid, createdPayment.id);
-
-                    return Redirect(paypalRedirectUrl);
                 }
-                else
+                Session.Add(guid, createdPayment.id);
+
+                return Redirect(paypalRedirectUrl);
+            }
+            else
+            {
+                string guid = Request.Params["guid"];
+
+                Payment executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
+
+                if (executedPayment.state.ToLower() != "approved")
                 {
-                    string guid = Request.Params["guid"];
-
-                    Payment executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
-
-                    if (executedPayment.state.ToLower() != "approved")
-                    {
-                        return View("Failure");
-                    }
+                    return View("Failure");
                 }
             }
-            catch (Exception)
-            {
-                return View("Failure");
-    }
-
             return View("Success");
-}
+        }
+        
     }
 }

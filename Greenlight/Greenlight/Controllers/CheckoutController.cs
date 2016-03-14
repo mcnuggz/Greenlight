@@ -18,11 +18,15 @@ namespace Greenlight.Controllers
         public ActionResult AddressAndPayment()
         {
             Order previousOrder = db.Orders.FirstOrDefault(x => x.Username == User.Identity.Name);
+            if (previousOrder != null)
+            {
+                return View(previousOrder);
+            }
             return View();
         }
 
         //
-        // GET: /Checkout/AddressAndPayment
+        // POST: /Checkout/AddressAndPayment
         [HttpPost]
         public ActionResult AddressAndPayment(FormCollection values)
         {
@@ -45,10 +49,10 @@ namespace Greenlight.Controllers
 
                 TempData["Order"] = order;
                 return RedirectToAction("PaymentWithPaypal", "Paypal");
+
             }
             catch (Exception)
             {
-
                 return View(order);
             }
         }
