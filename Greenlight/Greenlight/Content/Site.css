@@ -23,9 +23,10 @@ textarea {
     max-width: 280px;
 }
 .jumbotron{
-    padding: 0;
+    padding: 0 !important;
 }
 .jumbotron img{
     padding:0;
     width: 100%;
+    margin: 0;
 }

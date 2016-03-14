@@ -125,16 +125,16 @@ namespace Greenlight.Controllers
 
                     if (executedPayment.state.ToLower() != "approved")
                     {
-                        return View("FailureView");
+                        return View("Failure");
                     }
                 }
             }
             catch (Exception)
             {
-                return View("FailureView");
+                return View("Failure");
     }
 
-            return View("SuccessView");
+            return View("Success");
 }
     }
 }
